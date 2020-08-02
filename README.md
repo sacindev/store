@@ -1,2 +1,3 @@
-# store
+# Store
 Store created with MERN Stack
+
