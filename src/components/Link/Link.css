@@ -1,0 +1,22 @@
+.link {
+  color: white;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+.link:hover {
+  color: rgb(146, 127, 253);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.name {
+  font-size: 0.8em;
+  margin-left: 0.5rem;
+}
+
+.symbol {
+  font-size: 1.2em;
+}
