@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
-import Search from "./Search";
+import Search from "../search/Search";
 import styled from "styled-components";
 import Keypad from "./Keypad";
 import { Link } from "@reach/router";
