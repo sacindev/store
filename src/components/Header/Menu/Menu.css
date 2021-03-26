@@ -1,0 +1,23 @@
+.menu {
+  background-color: #1d2124;
+  padding: 1em;
+}
+
+.menu__item {
+  color: azure;
+  margin-bottom: 1rem;
+  font-size: 0.8em;
+  text-decoration: none;
+}
+.menu__item:hover {
+  color: rgb(155, 134, 240);
+  text-decoration: none;
+}
+.menu__cross {
+  background-color: white;
+}
+
+.menu__list{
+    display: flex;
+    flex-direction: column;
+}

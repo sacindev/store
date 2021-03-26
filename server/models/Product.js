@@ -6,6 +6,11 @@ var ProductSchema = new Schema({
   description: String,
   image: String,
   price: String,
+  categorie: {
+    type: String,
+    enum: ["GPU","SSD", "RAM", "HDD", "CPU"],
+    required: true
+  },
 });
 
 module.exports = mongoose.model("Product", ProductSchema);
