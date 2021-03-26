@@ -15,7 +15,7 @@ function Keypad() {
         </Link>
       </div>
       <div onClick={() => console.log("cart")}>
-        <Link>
+        <Link to="">
           <span
             className="material-icons"
             style={{ fontSize: "36px", color: "whitesmoke" }}
