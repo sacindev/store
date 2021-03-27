@@ -20,7 +20,7 @@ app.use("/api/user", require("./routes/user.routes"));
 app.use("/api/categorie", require("./routes/categorie.routes"));
 
 app.use("*", function (req, res) {
-  res.sendFile("C:/Users/SERGIO/Desktop/store/public/index.html");
+  res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
 try {
