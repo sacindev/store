@@ -1,6 +1,8 @@
 const webpack = require("webpack");
 module.exports = {
-  entry: "./src/index.js",
+  entry: {
+    fornt: "./src/index.js",
+  },
   output: {
     filename: "bundle.js",
     path: __dirname + "/public",
@@ -16,6 +18,11 @@ module.exports = {
           },
         },
         exclude: /node_modules/,
+      },
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        use: ["ts-loader"],
       },
       {
         test: /\.css$/i,

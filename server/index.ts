@@ -1,9 +1,11 @@
-const express = require("express");
-const mongoose = require("./database");
+import express from "express"
+import { run } from "./database"
 const morgan = require("morgan");
 const path = require("path");
 let bodyParser = require("body-parser");
-const dotenv = require("dotenv");
+
+
+run();
 
 var app = express();
 
@@ -19,7 +21,7 @@ app.use("/api/user", require("./routes/user.routes"));
 
 app.use("/api/categorie", require("./routes/categorie.routes"));
 
-app.use("*", function (req, res) {
+app.use("*", function (req: any, res: any) {
   res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
 
