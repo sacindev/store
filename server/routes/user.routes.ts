@@ -1,30 +1,31 @@
-const express = require("express");
+import express from "express"
 const router = express.Router();
-const User = require("../models/User");
+import {User} from "../models/User"
 const generateToken = require("../services/generateToken");
 const verifyToken = require("../services/verifyToken");
 
-router.get("/", async (req, res) => {
-  const users = await User.find();
-  res.json(users);
+router.get("/", async (req: any, res: any) => {
+  await User.find({}, function (error, users) {
+    res.json(users);  
+  });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req: any, res) => {
   const user = await User.findById(req.params.id);
   res.json(user);
 });
 
 // Login
-router.post("/login", async (req, res) => {
+router.post("/login", async (req: any, res) => {
   const { user_name, password } = req.body;
   console.log(req.body);
-  await User.findOne({ user_name: user_name }, (err, user) => {
+  await User.findOne({ user_name: user_name }, (err: any, user: any) => {
     if (err) throw err;
     console.log(user);
     if (!user) {
       res.status(400).json({ msg: "USER_NOT_FOUND", error: true });
     } else {
-      user.decryptPassword(password, (err, isChecked) => {
+      user.decryptPassword(password, (err: any, isChecked: any) => {
         if (err) throw err;
 
         if (!isChecked) {
@@ -42,9 +43,9 @@ router.post("/login", async (req, res) => {
 });
 
 // Verification Token
-router.post("/verification", verifyToken, async (req, res) => {
+router.post("/verification", verifyToken, async (req: any, res: any) => {
   console.log(req.user.id);
-  User.findOne({ _id: req.user.id }, (err, user) => {
+  User.findOne({ _id: req.user.id }, (err: any, user: any) => {
     if (err) {
       
     }
@@ -53,7 +54,7 @@ router.post("/verification", verifyToken, async (req, res) => {
 });
 
 //Add User
-router.post("/registry", (req, res) => {
+router.post("/new", (req: any, res: any) => {
   const {
     first_name,
     last_name,
@@ -63,7 +64,7 @@ router.post("/registry", (req, res) => {
     password,
   } = req.body;
 
-  User.findOne({ email: email }, async (err, user) => {
+  User.findOne({ email: email }, async (err: any, user: any) => {
     if (err) throw err;
     if (!user) {
       const user = new User({
@@ -82,13 +83,16 @@ router.post("/registry", (req, res) => {
       let token = await generateToken(JSON.stringify(user._id));
 
       res.json({ status: "User Saved", token: token });
+    }else{
+      res.json({ res: "Existing User" });
     }
-    res.json({ res: "Existing User" });
   });
 });
 
 // UPDATE a new user
-router.put("/:id", async (req, res) => {
+router.put("/edit/:id", async (req, res) => {
+  // res.json({res:req.body, params: req.params});
+
   const {
     first_name,
     last_name,
@@ -97,7 +101,7 @@ router.put("/:id", async (req, res) => {
     user_name,
     password,
   } = req.body;
-  user.password = await user.encryptPassword(user.password);
+  
   const newuser = new User({
     first_name,
     last_name,
@@ -106,7 +110,11 @@ router.put("/:id", async (req, res) => {
     user_name,
     password,
   });
-  await User.findByIdAndUpdate(req.params.id, newuser);
+  
+  newuser.password = await newuser.encryptPassword(password);
+  
+  await User.findOneAndUpdate({_id: req.params.id}, newuser);
+  
   res.json({ status: "User Updated" });
 });
 
