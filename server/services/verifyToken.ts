@@ -1,4 +1,4 @@
-function verifyToken(req, res, next) {
+function verifyToken(req: any, res: any, next:any) {
   const jwt = require("jsonwebtoken");
   const dotenv = require("dotenv");
   dotenv.config();
@@ -9,7 +9,7 @@ function verifyToken(req, res, next) {
   if (token == null) return res.sendStatus(401); // if there isn't any token
 
   try {
-    jwt.verify(token, process.env.TOKEN_SECRET, (error, decoded) => {
+    jwt.verify(token, process.env.TOKEN_SECRET, (error: any, decoded: any) => {
       if (error) {
         return res.status(403).json({ error: true, msg: "EXPIRED_TOKEN" });
       } else {

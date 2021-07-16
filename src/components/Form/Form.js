@@ -159,8 +159,8 @@ function Forms(props) {
     // }
   };
   return (
-    <Form onSubmit={handleSubmit(onSubmit)} className="form">
-    <h2 className="form__title">{getValues("price")}</h2>
+    <Form onSubmit={handleAction} className="form">
+    <h2 className="form__title">{title}</h2>
       {props.render(register, errors, getValues, setValue)}
       <Button variant="light" type="submit" className="form__button">
         Submit

@@ -8,7 +8,8 @@ function Login(props) {
   const { Group, Label, Control } = Form;
   return (
     <Forms
-      className="form"
+      handleAction={}
+      title={"Login"}
       render={(register, errors) => (
         <>
           <h2 className="form__title">Login</h2>
