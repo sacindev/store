@@ -14,7 +14,7 @@ router.get("/:id", async (req: any, res: any) => {
 });
 
 // ADD a new product
-router.post("/newproduct", async (req: any, res: any) => {
+router.post("/new", async (req: any, res: any) => {
   const { name, description, image, price } = req.body;
   const product = new Product({ name, description, image, price });
   await product.save();
@@ -22,7 +22,7 @@ router.post("/newproduct", async (req: any, res: any) => {
 });
 
 // UPDATE a new product
-router.put("/:id", async (req: any, res: any) => {
+router.put("/:id/edit", async (req: any, res: any) => {
   const { name, description, image, price } = req.body;
   const newproduct = { name, description, image, price };
   await Product.findByIdAndUpdate(req.params.id, newproduct);
