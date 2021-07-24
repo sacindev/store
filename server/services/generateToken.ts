@@ -1,4 +1,4 @@
-function generateToken(id) {
+function generateToken(id: any) {
   const jwt = require("jsonwebtoken");
   const dotenv = require("dotenv");
 
