@@ -37,17 +37,10 @@ function Login() {
   }
 
   return (
-<<<<<<< HEAD
-    <Forms
-      handleAction={}
-      title={"Login"}
-      render={(register, errors) => (
-=======
     <FormWrapper
       handleAction={handleSubmit(handleLogin)}
       title="Login"
       render={() => (
->>>>>>> desktop
         <>
           <Group className="form__item" controlId="user_name">
             <Label className="form__label">User</Label>
