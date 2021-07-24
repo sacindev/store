@@ -39,8 +39,9 @@ const UserSchema = new mongoose.Schema<IUser>({
 });
 
 
-UserSchema.method('decryptPassword', function(password: string) {
-  return bcrypt.compare(password, this.password);
+UserSchema.method('checkPassword', async function(password: string) {
+  let result = await bcrypt.compare(password, this.password);
+  return result;
 });
 
 UserSchema.method('encryptPassword', async function (password: string) {

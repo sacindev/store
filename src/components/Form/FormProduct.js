@@ -1,11 +1,37 @@
 import React, { useState } from "react";
-import Forms from "./Form";
+import FormWrapper from "./FormWrapper";
 import Form from "react-bootstrap/Form";
 
 export default function FormProduct() {
+  const schema_product = yup.object().shape({
+    title: yup
+      .string()
+      .lowercase()
+      .max(50)
+      .min(15)
+      .matches(/^[A-Za-z0-9\s]*$/g, "This field is not correct")
+      .required("This field is required"),
+
+    description: yup
+      .string()
+      .max(500)
+      .min(150)
+      .matches(/^[A-Za-z0-9]*$/g, "This field is not correct")
+      .required("Password is required"),
+    categorie: yup.string().required("This field is required"),
+    price: yup.number().min(0.0).max(1000.0),
+    file: yup.string(),
+    contract: yup.string().required(),
+  });
   const { Group, Label, Control, File } = Form;
+
   const [file, setFile] = useState({ value: null, class: "" });
+
   const [form, setForm] = useState({ price: 0, categorie: "Categories" });
+
+  const { register, handleSubmit, errors, getValues, setValue } = useForm({
+    resolver: yupResolver(schema_login)
+  });
 
   const handleChange = (event) => {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -30,10 +56,12 @@ export default function FormProduct() {
       reader.readAsDataURL(file);
     }
   }
+
   return (
-    <Forms
-      className="form"
-      render={(register, errors, getValues, setValue) => (
+    <FormWrapper
+      handleAction={handleSubmit(handleLogin)}
+      title="Login"
+      render={() => (
         <>
           <h2 className="form__title">New Product</h2>
           <Group controlId="title" className="form__item">

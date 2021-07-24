@@ -1,4 +1,8 @@
+<<<<<<< HEAD:server/services/verifyToken.ts
 function verifyToken(req: any, res: any, next:any) {
+=======
+function verifyToken(req: any, res: any, next: any) {
+>>>>>>> desktop:server/services/verifyToken.js
   const jwt = require("jsonwebtoken");
   const dotenv = require("dotenv");
   dotenv.config();

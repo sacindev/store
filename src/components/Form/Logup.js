@@ -1,18 +1,66 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import Forms from "./Form";
+import FormWrapper from "./FormWrapper";
 import "./Form.css";
 import { Calendar } from "react-calendar";
-function Logup(props) {
-  const [value, onChange] = useState(new Date());
-  const { Group, Label, Control } = Form;
-  return (
-    <Forms
-      className="form"
-      render={(register, errors) => (
-        <>
-          <h2 className="form__title">Sign Up🤝</h2>
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers";
+import fetchRegistry from "../../services/fetchRegistry";
+import * as yup from "yup";
 
+function Logup() {
+  const [value, onChange] = useState(new Date());
+
+  const { Group, Label, Control } = Form;
+
+  const schema_logup = yup.object().shape({
+    first_name: yup
+      .string()
+      .lowercase()
+      .matches(/^[A-Za-z\s]*$/g, "This field is not correct")
+      .required("This field is required"),
+    last_name: yup
+      .string()
+      .lowercase()
+      .matches(/^[A-Za-z\s]*$/g, "This field is not correct")
+      .required("This field is required"),
+    user_name: yup
+      .string()
+      .lowercase()
+      .matches(/^[A-Za-z0-9]*$/g, "This field is not correct")
+      .required("This field is required"),
+    birthday: yup
+    .date()
+    .required("This field is required"),
+    email: yup
+      .string()
+      .lowercase()
+      .email("Email is not correct")
+      .required("This field is required"),
+    password: yup.string().required("Password is required"),
+    passwordConfirmation: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Passwords must match")
+  });
+
+  const { register, handleSubmit, errors, getValues } = useForm({
+    resolver: yupResolver(schema_logup)
+  });
+
+
+  const handleLogup = async () => {
+    let values = getValues();
+    let promise = await fetchRegistry(values)
+    let response = await promise.json();
+    console.log(response);
+  }
+
+  return (
+    <FormWrapper
+      handleAction={handleSubmit(handleLogup)}
+      title="Logup"
+      render={() => (
+        <>
           <Group className="form__item" controlId="first_name">
             <Label className="form__label">First Name</Label>
             <Control
@@ -134,7 +182,6 @@ function Logup(props) {
               </strong>
             )}
           </Group>
-          <Control hidden name="contract" defaultValue="login" ref={register} />
         </>
       )}
     />

@@ -1,13 +1,15 @@
 import express from "express"
 const router = express.Router();
-import {User} from "../models/User"
+import { User } from "../models/User"
 const generateToken = require("../services/generateToken");
 const verifyToken = require("../services/verifyToken");
 
 router.get("/", async (req: any, res: any) => {
   await User.find({}, function (error, users) {
-    res.json(users);  
+    if(error) res.json({error: true, result: null})
+    res.json({error: false, result: users})
   });
+
 });
 
 router.get("/:id", async (req: any, res) => {
@@ -18,26 +20,20 @@ router.get("/:id", async (req: any, res) => {
 // Login
 router.post("/login", async (req: any, res) => {
   const { user_name, password } = req.body;
-  console.log(req.body);
-  await User.findOne({ user_name: user_name }, (err: any, user: any) => {
-    if (err) throw err;
-    console.log(user);
-    if (!user) {
-      res.status(400).json({ msg: "USER_NOT_FOUND", error: true });
-    } else {
-      user.decryptPassword(password, (err: any, isChecked: any) => {
-        if (err) throw err;
 
-        if (!isChecked) {
-          res.status(400).json({ msg: "PASSWOR_INCORRECT", error: true });
-        } else {
-          const token = generateToken(user._id);
-          res
-            .cookie("store", token)
-            .status(200)
-            .json({ msg: token, error: false });
-        }
-      });
+  await User.findOne({ user_name: user_name }, async (err: any, user: any) => {
+    if (err) throw err;
+
+    if (!user) {
+      res.status(400).json({ error: true, result: null, msg: "USER_NOT_FOUND" });
+    } else {
+      try {
+        let response = await user.chec9kPassword(password);
+        if (response) res.json({ error: false, result: user,msg: "SUCCESS"});
+        res.json({ error: true, result: null, msg: "PASSWORD NOT CORRECT"});
+      } catch (error) {
+        console.log(error);
+      }
     }
   });
 });
@@ -47,7 +43,7 @@ router.post("/verification", verifyToken, async (req: any, res: any) => {
   console.log(req.user.id);
   User.findOne({ _id: req.user.id }, (err: any, user: any) => {
     if (err) {
-      
+
     }
     res.status(200).json({ msg: "ALL_CORRECT", error: false, user: user });
   });
@@ -83,7 +79,7 @@ router.post("/new", (req: any, res: any) => {
       let token = await generateToken(JSON.stringify(user._id));
 
       res.json({ status: "User Saved", token: token });
-    }else{
+    } else {
       res.json({ res: "Existing User" });
     }
   });
@@ -101,7 +97,7 @@ router.put("/edit/:id", async (req, res) => {
     user_name,
     password,
   } = req.body;
-  
+
   const newuser = new User({
     first_name,
     last_name,
@@ -110,11 +106,11 @@ router.put("/edit/:id", async (req, res) => {
     user_name,
     password,
   });
-  
+
   newuser.password = await newuser.encryptPassword(password);
-  
-  await User.findOneAndUpdate({_id: req.params.id}, newuser);
-  
+
+  await User.findOneAndUpdate({ _id: req.params.id }, newuser);
+
   res.json({ status: "User Updated" });
 });
 

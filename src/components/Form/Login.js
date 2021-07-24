@@ -1,19 +1,54 @@
 import React from "react";
-import Form from "react-bootstrap/Form";
-import Forms from "./Form";
 import "./Form.css";
 import { Link } from "@reach/router";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers";
+import * as yup from "yup";
+import fetchUserLogged from "../../services/fetchUserLogged";
+import FormWrapper from "./FormWrapper"
+import Form from "react-bootstrap/Form";
 
-function Login(props) {
+
+function Login() {
+
+  const schema_login = yup.object().shape({
+    user_name: yup
+      .string()
+      .lowercase()
+      .matches(/^[A-Za-z0-9]*$/g, "This field is not correct")
+      .required("This field is required"),
+    password: yup.string().required("Password is required"),
+  });
+
   const { Group, Label, Control } = Form;
+
+  const { register, errors, getValues, handleSubmit } = useForm({
+    resolver: yupResolver(schema_login)
+  });
+
+
+  const handleLogin = () => {
+    let values = getValues();
+   fetchUserLogged(values).then(res => console.log(res))
+
+    // if (error) {
+    //   alert(msg)
+    // }
+  }
+
   return (
+<<<<<<< HEAD
     <Forms
       handleAction={}
       title={"Login"}
       render={(register, errors) => (
+=======
+    <FormWrapper
+      handleAction={handleSubmit(handleLogin)}
+      title="Login"
+      render={() => (
+>>>>>>> desktop
         <>
-          <h2 className="form__title">Login</h2>
-
           <Group className="form__item" controlId="user_name">
             <Label className="form__label">User</Label>
             <Control
@@ -53,7 +88,6 @@ function Login(props) {
               </p>
             </Link>
           </Group>
-          <Control type="text" ref={register}  name="contract" defaultValue="login"/>
         </>
       )}
     />
