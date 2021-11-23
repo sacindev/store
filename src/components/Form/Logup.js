@@ -48,11 +48,10 @@ function Logup() {
   });
 
 
-  const handleLogup = async () => {
+  const handleLogup =  () => {
     let values = getValues();
-    let promise = await fetchRegistry(values)
-    let response = await promise.json();
-    console.log(response);
+    fetchRegistry(values)
+   .then(res => console.log(res))
   }
 
   return (

@@ -5,19 +5,19 @@ import Keypad from "../Keypad";
 import withSizes from "react-sizes";
 import { Link } from "@reach/router";
 import Search from "../Search/Search";
-import Modal from "./Modal/Modal"
+import Dropdown from "./Dropdown/Dropdown"
 
 const mapSizesToProps = ({ width }) => ({
   isMobile: width < 769,
 });
 
 const Header = ({ isMobile }) => {
- let { Brand } = Navbar;
+  let { Brand } = Navbar;
 
   const conditionalRender = () => {
     let msg = null;
     if (isMobile) {
-      msg = <Modal />;
+      msg = <Dropdown />;
     } else {
       msg = (
         <Container>
@@ -37,7 +37,7 @@ const Header = ({ isMobile }) => {
     }
 
     return msg;
-  }; 
+  };
 
 
   return (

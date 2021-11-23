@@ -1,4 +1,4 @@
-export default function doLogin(token) {
+export default function fetchUser(token) {
   return fetch(`http://localhost:3000/api/user/verification`, {
     method: "POST",
     headers: {

@@ -1,4 +1,5 @@
 import express from "express"
+import { Error } from "mongoose";
 const router = express.Router();
 import { User } from "../models/User"
 const generateToken = require("../services/generateToken");
@@ -28,9 +29,15 @@ router.post("/login", async (req: any, res) => {
       res.status(400).json({ error: true, result: null, msg: "USER_NOT_FOUND" });
     } else {
       try {
-        let response = await user.chec9kPassword(password);
-        if (response) res.json({ error: false, result: user,msg: "SUCCESS"});
-        res.json({ error: true, result: null, msg: "PASSWORD NOT CORRECT"});
+        let response = await user.checkPassword(password);
+        if (response){
+          let token = await generateToken(JSON.stringify(user._id));
+          res
+          .cookie("store", token)
+          .json({ error: false, result: token, msg: "SUCCESS"})
+        } else {
+          res.json({ error: true, result: null, msg: "PASSWORD NOT CORRECT"});
+        }
       } catch (error) {
         console.log(error);
       }
@@ -39,13 +46,15 @@ router.post("/login", async (req: any, res) => {
 });
 
 // Verification Token
-router.post("/verification", verifyToken, async (req: any, res: any) => {
-  console.log(req.user.id);
-  User.findOne({ _id: req.user.id }, (err: any, user: any) => {
+router.post("/verification", verifyToken, (req: any, res: any) => {
+  console.log(req.user);
+  
+   User.findOne({ _id: JSON.parse(req.user.id) }, (err: any, user: any) => {
     if (err) {
-
+      res.status(200).json({  error: true, result: null, msg: err.message});
+    } else {
+      res.status(200).json({  error: false, result: user, msg: "ALL_CORRECT"});
     }
-    res.status(200).json({ msg: "ALL_CORRECT", error: false, user: user });
   });
 });
 
@@ -78,7 +87,7 @@ router.post("/new", (req: any, res: any) => {
 
       let token = await generateToken(JSON.stringify(user._id));
 
-      res.json({ status: "User Saved", token: token });
+      res.json({ status: "User Saved", token: user });
     } else {
       res.json({ res: "Existing User" });
     }

@@ -1,18 +1,21 @@
-import React, { useContext } from "react";
+import React, { Fragment } from "react";
 import Header from "../../components/Header/Header";
 import Product from "../../components/Product/Product";
-import { UserContext } from "../../contexts/UserContext";
-function Home(props) {
-  // console.log("Home render");
-  // const { isLogin } = useContext(UserContext);
+import { UserConsumer } from "../../contexts/UserContext";
 
+function Home() {
   return (
-    <React.Fragment>
-      <Header />
-      <Product />
-      <Product />
-      <Product />
-    </React.Fragment>
+    <UserConsumer>
+      {(context) => (
+        <Fragment>
+          <Header />
+          <Product />
+          <Product />
+          <Product />
+        </Fragment>
+      )
+      }
+    </UserConsumer>
   );
 }
 
