@@ -10,7 +10,7 @@ import Payment from "../Payment/Payment";
 import Session from "../Session/Session";
 import Manage from "../Manage/Manage";
 
-const App = (props) => {
+const App = () => {
   return (
     <UserProvider>
       <Router>

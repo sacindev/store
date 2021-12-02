@@ -1,7 +1,8 @@
-import mongoose from 'mongoose'
+import mongoose,{ObjectId} from 'mongoose'
 import bcrypt from 'bcrypt'
 
-interface IUser {
+ interface UserType {
+  _id: ObjectId,
   first_name: string,
   last_name: string,
   birthday: string,
@@ -9,10 +10,12 @@ interface IUser {
   user_name: string
   password: string,
   product_list: string[],
-  role: Object
+  role: Object, 
+  checkPassword:Function,
+  encryptPassword: Function
 }
 
-const UserSchema = new mongoose.Schema<IUser>({
+const UserSchema = new mongoose.Schema<UserType>({
   first_name: String,
   last_name: String,
   birthday: Date,
@@ -49,5 +52,7 @@ UserSchema.method('encryptPassword', async function (password: string) {
   return bcrypt.hash(password, salt);
 });
 
-export const User = mongoose.model("User", UserSchema);
- 
+const User = mongoose.model("User", UserSchema, 'users');
+
+
+export  {User, UserType, UserSchema}

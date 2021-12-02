@@ -1,7 +1,9 @@
-function verifyToken(req: any, res: any, next:any) {
-  
-  const jwt = require("jsonwebtoken");
+import { Request, Response } from "express";
+import { User, UserType } from "../models/User";
+import jwt from "jsonwebtoken";
+import { Error } from "mongoose";
 
+function verifyToken(req: Request, res: Response) {
   const dotenv = require("dotenv");
 
   dotenv.config();
@@ -10,20 +12,47 @@ function verifyToken(req: any, res: any, next:any) {
 
   const token = authHeader && authHeader.split(" ")[1];
 
-  if (token == null) return res.sendStatus(401); // if there isn't any token
+  if (token == null) return res.sendStatus(401);
 
   try {
-    jwt.verify(token, process.env.TOKEN_SECRET, (error: any, decoded: any) => {
-      if (error) {
-        res.status(403).json({ error: true, msg: "EXPIRED_TOKEN" });
-      } else {
-        req.user = decoded
-        next();
+    jwt.verify(
+      token,
+      process.env.TOKEN_SECRET as jwt.Secret,
+       (error: any, decoded: any) => {
+         
+        if (error) {
+          res.status(500).json({ error: true, msg: "EXPIRED_TOKEN" });
+        } else {
+
+          User.findOne({ _id: decoded.id}, (err: Error, document: UserType) => {
+              
+            if (err) {
+              res
+              .status(500)
+              .json({ error: true, result: null, msg: "USER_NOT_FOUND" });
+              return;
+            }
+            
+            if (!document) {
+              res
+              .status(500)
+              .json({ error: true, result: null, msg: "USER_NOT_FOUND" });
+              return;
+            }else{
+              res
+              .status(200)
+              .json({error: false, result: document, msg: "EVERYTHING_OK"});
+              return;
+
+            }
+            }
+          );
+        }
       }
-    });
+    );
   } catch (error) {
-    console.log(error);
+    throw new Error("Something is wrong on verifyToken");
   }
 }
 
-module.exports = verifyToken;
+export default verifyToken;

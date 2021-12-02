@@ -1,52 +1,81 @@
-import { token } from "morgan";
 import React, { useState, useEffect } from "react";
 import fetchUser from "../services/fetchUser";
-import { findCookie } from "../utils/findCookie";
-
+import loginService from "../services/loginService";
+import logoutService from '../services/logoutService'
+import { navigate } from "@reach/router";
 const UserContext = React.createContext();
 const UserConsumer = UserContext.Consumer;
 
+const status = {
+  loading: "loading",
+  error: "error",
+  nice: "nice",
+};
+
 function UserProvider({ children }) {
-  const [state, setState] = useState({ isLogged: false, data: null });
+  const [user, setUser] = useState({ data: [], isLogged: false });
+  const [msg, setMesagge] = useState("");
+  const [loading, setLoading] = useState(status.loading);
+  const [token, setToken] = useState(window.localStorage.getItem('store'));
 
-  let cookie = findCookie("store");
   useEffect(() => {
-    fetchUser(cookie || null)
-      .then((res) => {
-        if (res.error) {
-          throw res.msg;
-        } else {
-          setState({ isLogged: true, data: res.result });
-        }
-      });
-  }, []);
+    fetchUser(token).then((res) => {
+      if (res.error) {
+        setLoading(status.error);
+        setUser({ data: [], isLogged: false });
+        setMesagge(res.error);
+      } else {
+        setLoading(status.nice);
+        setUser({ data: res.result, isLogged: true });
+        setMesagge(msg)
+      }
+    });
+  }, [token]);
 
+  const doLogin = (dataForm) => {
+    loginService(dataForm).then((res) => {
 
-  const setToken = (token) => {
-    fetchUser(token)
-      .then((res) => {
-        if (res.error) {
-          throw res.msg;
-        } else {
-          setState({ isLogged: true, data: res.result });
-        }
-      });
+      const { error, msg, token } = res;
+
+      if (error) {
+        setMesagge(error)
+        return;
+      }
+        setToken(token);
+
+        setMesagge(msg)
+
+        navigate("/");
+    });
   };
 
-  const deleteToken = () => {
-    let cookie = findCookie("asdf");
-  }
+  const doLogout = () => {
+    logoutService(token).then(res => {
+      const {msg, token, error} = res;
+      if (error) {
+        alert(msg);
+        return;
+      }
 
+      setToken(token);
+
+      setMesagge(msg)
+
+      navigate('/signup')
+      
+    })
+  }
 
   return (
     <UserContext.Provider
-      value={
-        {
-          isLogged: state.isLogged,
-          data: state.data,
-          setToken
-        }
-      }
+      value={{
+        user: user.data,
+        isLogged: user.isLogged,
+        doLogin,
+        msg,
+        loading,
+        doLogout
+      }}
     >
       {children}
     </UserContext.Provider>

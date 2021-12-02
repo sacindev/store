@@ -51,7 +51,6 @@ function Logup() {
   const handleLogup =  () => {
     let values = getValues();
     fetchRegistry(values)
-   .then(res => console.log(res))
   }
 
   return (

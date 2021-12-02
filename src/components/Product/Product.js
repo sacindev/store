@@ -7,10 +7,10 @@ function Product({ descripcion, img, nombre }) {
   return (
     <Card>
       <Picture url="https://picsum.photos/200" />
-      <div>
+      <main>
         <h5>{nombre || "Tittle"}</h5>
         <p>{descripcion || "Description "}</p>
-      </div>
+      </main>
     </Card>
   );
 }

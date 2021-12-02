@@ -4,8 +4,8 @@ const Card = styled.div`
   background-color: #fff;
   display: grid;
   grid-template-columns: 1fr 2fr;
-  border-bottom: 0.15em solid #ddd;
-
+  border: 0.15em solid #ddd;
+  margin: 1rem 0;
   & > div {
     padding: 1em 0;
   }

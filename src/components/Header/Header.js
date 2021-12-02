@@ -1,11 +1,12 @@
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import styled from "styled-components";
-import Keypad from "../Keypad";
+import Keypad from "./Keypad/Keypad";
 import withSizes from "react-sizes";
 import { Link } from "@reach/router";
 import Search from "../Search/Search";
 import Dropdown from "./Dropdown/Dropdown"
+import './Header.css'
 
 const mapSizesToProps = ({ width }) => ({
   isMobile: width < 769,
@@ -15,7 +16,7 @@ const Header = ({ isMobile }) => {
   let { Brand } = Navbar;
 
   const conditionalRender = () => {
-    let msg = null;
+    let msg;
     if (isMobile) {
       msg = <Dropdown />;
     } else {
@@ -42,13 +43,9 @@ const Header = ({ isMobile }) => {
 
   return (
     <Navbar
+      className="navbar"
       collapseOnSelect
       expand="lg"
-      style={{
-        backgroundColor: "#1d2124",
-        padding: "0",
-        height: "50px",
-      }}
     >
       {conditionalRender()}
     </Navbar>
@@ -60,35 +57,24 @@ export default withSizes(mapSizesToProps)(Header);
 const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
-  width: 100%;
-  padding: 0;
-  align-items: center;
-  justify-items: center;
-  gap: 1em;
-  background-color: #212529;
-  height: 100%;
+  width: 100vw;
+  gap: 1rem;
 `;
 
 const Start = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 1em;
-  width: 100%;
+  margin-left: 1rem;
 `;
 
 const Center = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 1em;
-  width: 100%;
 `;
 
 const End = styled.div`
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  padding: 0 1em;
-  width: 100%;
 `;

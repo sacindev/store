@@ -4,17 +4,13 @@ import { Link, navigate } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
-import fetchUserLogged from "../../services/fetchUserLogged";
-import FormWrapper from "./FormWrapper"
+import fetchUserLogged from "../../services/loginService";
+import FormWrapper from "./FormWrapper";
 import Form from "react-bootstrap/Form";
 import { UserContext } from "../../contexts/UserContext";
 
-
-
 function Login() {
-  const { setToken } = useContext(UserContext);
-
-  console.log(useContext(UserContext));
+  const {  doLogin } = useContext(UserContext);
 
   const schema_login = yup.object().shape({
     user_name: yup
@@ -28,23 +24,13 @@ function Login() {
   const { Group, Label, Control } = Form;
 
   const { register, errors, getValues, handleSubmit } = useForm({
-    resolver: yupResolver(schema_login)
+    resolver: yupResolver(schema_login),
   });
 
   const handleLogin = () => {
-    let values = getValues();
-    fetchUserLogged(values).then(res => {
-      const { error, msg, result } = res; 
-      console.log(res)
-      if (error) {
-        alert(msg)
-      } else {
-        Promise
-          .resolve(setToken(result))
-          .then(() => navigate("/"))
-      }
-    })
-  }
+    const values = getValues();
+     doLogin(values)
+  };
 
   return (
     <FormWrapper

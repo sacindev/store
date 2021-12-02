@@ -1,12 +1,8 @@
-function generateToken(id: any) {
-  const jwt = require("jsonwebtoken");
-  const dotenv = require("dotenv");
+require("dotenv").config();
+import jwt from "jsonwebtoken";
 
-  dotenv.config();
-
-  const expiration = "1d";
-
-  return jwt.sign({ id }, process.env.TOKEN_SECRET, { expiresIn: expiration });
+ function generateToken(id: any, expiresIn: string) {
+  return jwt.sign({id: id}, process.env.TOKEN_SECRET as jwt.Secret, {expiresIn : expiresIn});
 }
 
-module.exports = generateToken;
+export default generateToken;

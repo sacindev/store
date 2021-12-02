@@ -1,21 +1,14 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Header from "../../components/Header/Header";
 import Product from "../../components/Product/Product";
-import { UserConsumer } from "../../contexts/UserContext";
 
 function Home() {
+  const list = [{}, {}, {}, {}, {}];
   return (
-    <UserConsumer>
-      {(context) => (
-        <Fragment>
-          <Header />
-          <Product />
-          <Product />
-          <Product />
-        </Fragment>
-      )
-      }
-    </UserConsumer>
+    <>
+      <Header />
+      <main>{list.map((item, index) => <Product key={index}/>)}</main>
+    </>
   );
 }
 

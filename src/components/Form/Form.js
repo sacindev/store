@@ -143,7 +143,6 @@ function Forms(props) {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
 
     // switch (data.contract) {
     //   case CONTRACT.REGISTRY:
