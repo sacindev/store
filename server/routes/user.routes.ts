@@ -9,7 +9,10 @@ import generateToken from "../services/generateToken";
 const router = express.Router();
 
 import loginUser from "../services/loginUser";
+
 import logoutUser from "../services/logoutUser";
+
+import logNewUser from "../services/logNewUser";
 
 router.get("/", async (req: Request, res: Response) => {
   await User.find({}, function (error, users) {
@@ -29,34 +32,7 @@ router.post("/logout", logoutUser);
 
 router.post("/verification", verifyToken);
 
-router.post("/new", (req: Request, res: Response) => {
-  // const { first_name, last_name, birthday, email, user_name, password } =
-  //   req.body;
-
-  // User.findOne({ email: email }, async (err: any, user: any) => {
-  //   if (err) throw err;
-  //   if (!user) {
-  //     const user = new User({
-  //       first_name,
-  //       last_name,
-  //       birthday,
-  //       email,
-  //       user_name,
-  //       password,
-  //     });
-
-  //     user.password = await user.encryptPassword(user.password);
-
-  //     await user.save();
-
-  //     let token = await generateToken(JSON.stringify(user._id));
-
-  //     res.json({ status: "User Saved", token: user });
-  //   } else {
-  //     res.json({ res: "Existing User" });
-  //   }
-  // });
-});
+router.post("/new", logNewUser);
 
 router.put("/edit/:id", async (req: Request, res: Response) => {
   // res.json({res:req.body, params: req.params});

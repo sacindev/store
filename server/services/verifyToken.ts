@@ -21,10 +21,11 @@ function verifyToken(req: Request, res: Response) {
        (error: any, decoded: any) => {
          
         if (error) {
-          res.status(500).json({ error: true, msg: "EXPIRED_TOKEN" });
+          res.status(500).json({ error: true, msg: error.msg });
         } else {
 
           User.findOne({ _id: decoded.id}, (err: Error, document: UserType) => {
+          console.log(err, document);
               
             if (err) {
               res

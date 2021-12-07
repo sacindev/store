@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import fetchUser from "../services/fetchUser";
 import loginService from "../services/loginService";
 import logoutService from '../services/logoutService'
+import logupService from '../services/logupService'
 import { navigate } from "@reach/router";
 const UserContext = React.createContext();
 const UserConsumer = UserContext.Consumer;
@@ -65,6 +66,22 @@ function UserProvider({ children }) {
       
     })
   }
+  const doLogup = (data) => {
+    logupService(data).then(res => {
+      const {msg, token, error} = res;
+      if (error) {
+        alert(msg);
+        return;
+      }
+
+      setToken(token);
+
+      setMesagge(msg)
+
+      navigate('/')
+      
+    })
+  }
 
   return (
     <UserContext.Provider
@@ -74,7 +91,8 @@ function UserProvider({ children }) {
         doLogin,
         msg,
         loading,
-        doLogout
+        doLogout, 
+        doLogup
       }}
     >
       {children}

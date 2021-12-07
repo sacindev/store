@@ -5,6 +5,6 @@ export default function fetchRegistry (data) {
     headers: {
       "Content-Type":"application/json",
     },
-  })
+  }).then(res => res.json())
     
 }

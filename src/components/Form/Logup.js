@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Form from "react-bootstrap/Form";
 import FormWrapper from "./FormWrapper";
 import "./Form.css";
 import { Calendar } from "react-calendar";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
-import fetchRegistry from "../../services/fetchRegistry";
 import * as yup from "yup";
-
+import { UserContext, UserProvider } from "../../contexts/UserContext";
 function Logup() {
+
+  const {doLogup} = useContext(UserContext)
+
   const [value, onChange] = useState(new Date());
 
   const { Group, Label, Control } = Form;
@@ -49,8 +51,8 @@ function Logup() {
 
 
   const handleLogup =  () => {
-    let values = getValues();
-    fetchRegistry(values)
+    const values = getValues();
+    doLogup(values)
   }
 
   return (
